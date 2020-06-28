@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  kafka-producer:
+    image: kafka_producer:dev
+    build: 
+      context: kafka_producer/.
+    environment:
+      - "KAFKA_BOOTSTRAP_SERVERS=kafka:9092"
+    depends_on:
+      - kafka
+  kafka-consumer:
+    image: kafka_consumer:dev
+    build: 
+      context: kafka_consumer/.
+    environment:
+      - "KAFKA_BOOTSTRAP_SERVERS=kafka:9092"
+      - "BROADCAST=false"
+    depends_on:
+      - kafka
+  kafka:
+    image: spotify/kafka
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    environment:
+      - ADVERTISED_HOST=
+      - ADVERTISED_PORT=9092
+      - AUTO_CREATE_TOPICS=true
+
